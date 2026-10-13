@@ -28,14 +28,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Create website folders
+      - name: Prepare website folders
         run: |
-          mkdir -p site/assignment-1
-          mkdir -p site/assignment-2
-          mkdir -p site/assignment-3
-          mkdir -p site/assignment-4
-          mkdir -p site/assignment-5
-          mkdir -p site/assignment-6
+          mkdir -p site/assignment-1 site/assignment-2 site/assignment-3
+          mkdir -p site/assignment-4 site/assignment-5 site/assignment-6
 
       - name: Copy HTML assignments
         run: |
@@ -64,17 +60,17 @@ jobs:
       - name: Copy Assignment 6
         run: cp -R "Assignment 6/dist/." site/assignment-6/
 
-      - name: Create Pages artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
